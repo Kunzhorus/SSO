@@ -93,7 +93,6 @@ function GroupRole() {
     }
   };
 
-  
   return (
     <div className="group-role-cotainer container">
       <div className="assign-group-role">
