@@ -85,7 +85,7 @@ function GroupRole() {
     return result
   };
 
-  
+
   const handleSaveAssign = async () => {
     let data = buildDataToSave();
     let response = await assignRoleToGroup(data);
@@ -93,7 +93,6 @@ function GroupRole() {
       toast.success(response.EM)
     }
   };
-
 
   return (
     <div className="group-role-cotainer container">
