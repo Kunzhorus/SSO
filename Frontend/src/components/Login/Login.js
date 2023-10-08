@@ -23,7 +23,7 @@ function Login() {
       handleLogin()
     }
   }
-
+  
   const handleLogin = async() => {
     setObjectCheckValid(defaultValidCheck)
     if(!valueLogin) {
@@ -55,8 +55,6 @@ function Login() {
     loginContext(data)
     history.push("/users")
   }
-
-
 
   return (
     <section className="h-100 gradient-form" style={{ backgroundColor: "#eee" }}>
