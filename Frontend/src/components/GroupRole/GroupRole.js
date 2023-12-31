@@ -35,7 +35,7 @@ function GroupRole() {
         let data = await fetchRolesByGroup(value);
         let roles = data.DT.Roles;
         let allRoles = await getAllRoles();
-        let result = builDataRolesByGroup(roles, allRoles);
+        let result = buildDataRolesByGroup(roles, allRoles);
         setListRoles(result);
       }
     } catch (e) {
@@ -43,7 +43,7 @@ function GroupRole() {
     }
   };
 
-  const builDataRolesByGroup = (groupRoles, allRoles) => {
+  const buildDataRolesByGroup = (groupRoles, allRoles) => {
     let result = [];
     if (allRoles && allRoles.length > 0) {
       allRoles.map((role) => {

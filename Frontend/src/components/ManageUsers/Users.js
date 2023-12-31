@@ -48,7 +48,6 @@ function Users() {
       console.log(e);
     }
   }
-
   useEffect(() => {
     fetchData();
   }, []);
