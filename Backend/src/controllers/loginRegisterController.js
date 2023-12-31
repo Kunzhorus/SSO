@@ -9,7 +9,6 @@ const RegisterController = async (req, res) => {
         DT: "",
       });
     }
-
     let data = await registerNewUser(req.body);
 
     return res.status(200).json({
