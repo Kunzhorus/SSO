@@ -116,7 +116,6 @@ function Signup() {
                           placeholder="Enter username"
                         />
                       </div>
-
                       <div className="form-outline mb-4">
                         <label className="form-label" >
                           Phonenumber
