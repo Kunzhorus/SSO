@@ -19,24 +19,23 @@ const verifyToken = (token) => {
 const checkUserJWT = (req, res, next) => {
   if (nonSecurePaths.includes(req.path)) return next();
   let cookies = req.cookies;
-  if (cookies && cookies.jwt) {
-    let token = cookies.jwt;
-    let decoded = verifyToken(token);
+  if (cookies && cookies.access_token) {
+    let access_token = cookies.access_token;
+    let decoded = verifyToken(access_token);
     if (decoded) {
+      decoded.access_token = access_token;
+      decoded.refresh_token = cookies.refresh_token;
       req.user = decoded;
-      req.token = token;
       next();
     } else {
       return res.status(401).json({
         EC: -1,
-        DT: "",
         EM: "Not authenticated the user",
       });
     }
   } else {
     return res.status(401).json({
       EC: -1,
-      DT: "",
       EM: "Not authenticated the user",
     });
   }
@@ -50,9 +49,8 @@ const checkUserPermission = (req, res, next) => {
     let currentUrl = req.path;
     if (!roles || roles.length === 0) {
       return res.status(403).json({
-        EM: "You don't have permission to acces this resource",
+        EM: "You don't have permission to access this resource",
         EC: -1,
-        DT: "",
       });
     }
     let canAccess = roles.some((item) => item.url === currentUrl);
@@ -60,16 +58,14 @@ const checkUserPermission = (req, res, next) => {
       next();
     } else {
       return res.status(403).json({
-        EM: "You don't have permission to acces this resource",
+        EM: "You don't have permission to access this resource",
         EC: -1,
-        DT: "",
       });
     }
   } else {
     return res.status(401).json({
       EM: " Not authenticated the user",
       EC: -1,
-      DT: "",
     });
   }
 };

@@ -83,15 +83,17 @@ const deleteUserController = async (req, res ) => {
     }
 }
 
-const getUserAccount = async( req, res ) => {
+const getUserAccount = async( req, res ) => { 
+ 
     return res.status(200).json({
-        EM: 'ok', // error message
-        EC: 0, //error code
+        EM: 'Get User Information Successfully', 
+        EC: 0, 
         DT: {
-            access_token: req.token,
-            roles: req.user.roles,
-            email: req.user.email,
-            username: req.user.username
+            access_token: req.user?.access_token,
+            refresh_token: req.user?.access_token,
+            roles: req.user?.roles,
+            email: req.user?.email,
+            username: req.user?.username
         }
     })
 }

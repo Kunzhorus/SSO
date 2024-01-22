@@ -1,10 +1,11 @@
 import db from "../models/index";
-import {getGroupWithRoles} from "./JWTservice"
-import {createJWT} from "../middleware/JWTAction"
-require('dotenv').config()
+import { getGroupWithRoles } from "./JWTservice";
+import { createJWT } from "../middleware/JWTAction";
+require("dotenv").config();
 const bcrypt = require("bcryptjs");
 const salt = bcrypt.genSaltSync(10);
 const { Op } = require("sequelize");
+import { v4 as uuidv4 } from "uuid";
 
 const checkEmailExist = async (userEmail) => {
   let user = await db.User.findOne({
@@ -59,7 +60,7 @@ const registerNewUser = async (rawUserData) => {
       username: rawUserData.username,
       password: password,
       phone: rawUserData.phone,
-      groupId : rawUserData.groupId ? rawUserData.groupId : 4
+      groupId: rawUserData.groupId ? rawUserData.groupId : 4,
       // groupId : 4
     });
 
@@ -86,23 +87,24 @@ const loginUser = async (rawData) => {
     if (user) {
       let isCorrectPassword = checkPassword(rawData.password, user.password);
       if (isCorrectPassword === true) {
-        let roles = await getGroupWithRoles(user)
-        let payload = {
-          email : user.email,
-          username: user.username,
-          roles
-        }
-        let token = createJWT(payload)
+        const code = uuidv4();
+        let roles = await getGroupWithRoles(user);
+        // let payload = {
+        //   email : user.email,
+        //   username: user.username,
+        //   roles
+        // }
+        // let token = createJWT(payload)
         return {
-          EM: "ok",
+          EM: "Login successfully",
           EC: 0,
           DT: {
-            access_token: token,
-            roles ,
+            code: code,
             email: user.email,
-            username: user.username
-          } 
-        }
+            roles,
+            username: user.username,
+          },
+        };
       }
     }
 
@@ -111,8 +113,6 @@ const loginUser = async (rawData) => {
       EC: 1,
       DT: "",
     };
-
-
   } catch (e) {
     console.log(e);
     return {
@@ -122,10 +122,47 @@ const loginUser = async (rawData) => {
   }
 };
 
-module.exports = {
+const updateUserRefreshToken = async (email, token) => {
+  try {
+    await db.User.update({ refreshToken: token }, { where: { email: email } });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const upsertUserSocialMedia = async (typeAcc, dataRaw) => {
+  try {
+    let user = null;
+    if (typeAcc === "GOOGLE") {
+      user = await db.User.findOne({
+        where: {
+          email: dataRaw.email,
+          type: typeAcc,
+        },
+        raw: true,
+      });
+
+      if (!user) {
+        user = await db.User.create({
+          email: dataRaw.email,
+          username: dataRaw.username,
+          type: typeAcc,
+        });
+        user = user.get({ plain: true });
+      }
+    }
+    return user;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export {
   registerNewUser,
   loginUser,
   hashPassword,
   checkEmailExist,
-  checkPhoneExist
+  checkPhoneExist,
+  updateUserRefreshToken,
+  upsertUserSocialMedia,
 };

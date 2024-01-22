@@ -53,7 +53,8 @@ const LoginController = async (req, res) => {
 
 const LogoutController = async (req, res) => {
   try {
-    res.clearCookie("jwt");
+    res.clearCookie("access_token");
+    res.clearCookie("refresh_token");
     return res.status(200).json({
       EM: "Logout success",
       EC: 0,

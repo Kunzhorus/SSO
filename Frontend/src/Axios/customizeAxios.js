@@ -62,7 +62,10 @@ instance.interceptors.response.use(function (response) {
       case 422: {
         return Promise.reject(error);
       }
-
+      case 500:{
+        toast.error("There is an error while connecting to server")
+        return Promise.reject(error);
+      }
       // generic api error (server related) unexpected
       default: {
         return Promise.reject(error);

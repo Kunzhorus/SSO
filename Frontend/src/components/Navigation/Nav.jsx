@@ -2,33 +2,35 @@ import { useContext } from "react";
 import "./Nav.scss";
 import { NavLink } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
-import { useHistory, useLocation } from "react-router-dom/cjs/react-router-dom.min";
+import {
+  useHistory,
+  useLocation,
+} from "react-router-dom/cjs/react-router-dom.min";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { logoutUser } from "../../services/userServices";
 import { toast } from "react-toastify";
-
+import { useDispatch, useSelector } from "react-redux";
+import { doLogout } from "../../redux/action/accountAction";
 function NavHeader() {
-  const { user , logoutContext} = useContext(UserContext);
-  const location = useLocation();
-  const history = useHistory()
+  const user = useSelector(state => state.account.userInfo)
 
-  const handleLogout = async() => {
-    let data = await logoutUser(); //clear cookie
-    // localStorage.removeItem('jwt')// clear localstorage
-    logoutContext();// cleare user in Context
-    if(data && +data.EC === 0){
-      toast.success(data.EM)
-      history.push('/login')
-    }else{
-      toast.error(data.EM)
-    }
+  const location = useLocation();
+  const history = useHistory();
+  const dispatch = useDispatch()
+
+  const handleLogin = () => {
+    window.location.href =`${import.meta.env.VITE_REACT_APP_BACKEND_HOST}/login?serviceURL=${import.meta.env.VITE_REACT_SERVICE_URL}`
   }
 
+  const handleLogout = () => {
+    dispatch(doLogout())
+    history.push("/")
+  };
 
-  if ((user && user.isAuthenticated === true) || location.pathname === "/") {
+  if ((user && user.access_token) || location.pathname === "/") {
     return (
       <>
         <div className="nav-header">
@@ -53,15 +55,13 @@ function NavHeader() {
                 </Nav>
 
                 <Nav>
-                  {user && user.isAuthenticated === true ? (
+                  {user && user.access_token ? (
                     <>
                       <Nav.Item className="nav-link">
-                        Welcome {user.account.username}!
+                        Welcome {user.username} !
                       </Nav.Item>
                       <NavDropdown title="Settings" id="basic-nav-dropdown">
-                        <NavDropdown.Item >
-                          Change Password
-                        </NavDropdown.Item>
+                        <NavDropdown.Item>Change Password</NavDropdown.Item>
 
                         <NavDropdown.Divider />
                         <NavDropdown.Item onClick={() => handleLogout()}>
@@ -70,9 +70,12 @@ function NavHeader() {
                       </NavDropdown>
                     </>
                   ) : (
-                    <NavLink to="/login" className="nav-link">
+                    // <NavLink to="/login" className="nav-link">
+                    //   Login
+                    // </NavLink>
+                    <div className="nav-link" style={{cursor:"pointer"}} onClick={() => handleLogin()}>
                       Login
-                    </NavLink>
+                    </div>
                   )}
                 </Nav>
               </Navbar.Collapse>

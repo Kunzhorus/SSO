@@ -1,12 +1,12 @@
 import { useContext } from "react";
 import { Route, useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { UserContext } from "../context/UserContext";
 import { toast } from "react-toastify";
-function PrivateRoutes(props) {
-    let history = useHistory()
-    const {user} = useContext(UserContext)
+import { useSelector } from "react-redux";
 
-    if(user && user.isAuthenticated ){
+function PrivateRoutes(props) {
+    const user = useSelector(state => state.account.userInfo)
+
+    if(user && user.access_token ){
       return ( 
         <>
           <Route path={props.path} component ={props.component}/>
@@ -14,7 +14,7 @@ function PrivateRoutes(props) {
       )
     } else{
       toast.error("Unauthorized user")
-      history.push('/login')
+      window.location.href =`${import.meta.env.VITE_REACT_APP_BACKEND_HOST}/login?serviceURL=${import.meta.env.VITE_REACT_SERVICE_URL}`
     }
    
 }
