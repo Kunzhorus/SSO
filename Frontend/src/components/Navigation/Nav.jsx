@@ -1,7 +1,5 @@
-import { useContext } from "react";
 import "./Nav.scss";
 import { NavLink } from "react-router-dom";
-import { UserContext } from "../../context/UserContext";
 import {
   useHistory,
   useLocation,
@@ -42,6 +40,9 @@ function NavHeader() {
                 <Nav className="me-auto">
                   <NavLink to="/" exact className="nav-link">
                     Home
+                  </NavLink>
+                  <NavLink to="/about" exact className="nav-link">
+                    About
                   </NavLink>
                   <NavLink to="/users" className="nav-link">
                     Users

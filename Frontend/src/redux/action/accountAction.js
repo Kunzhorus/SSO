@@ -9,50 +9,56 @@ export const USER_LOGOUT_REQUEST = "USER_LOGOUT_REQUEST";
 export const USER_LOGOUT_FAILED = "USER_LOGOUT_FAILED";
 export const USER_LOGOUT_SUCCESS = "USER_LOGOUT_SUCCESS";
 
-export const doLogin =(ssoToken) => {
-    return async (dispatch, getState) => {
-        dispatch({ type: USER_LOGIN_REQUEST })
-        let res = await axios.post(
-            `${import.meta.env.VITE_REACT_APP_BACKEND_HOST}/verify-token`,
-            { ssoToken },
-            { withCredentials: true }
-          );
-          if (res.EC === 0) {
-            dispatch({ type: USER_LOGIN_SUCCESS, user: res.DT })
-            toast.success(res.EM)
-          } else {
-            dispatch({ type: USER_LOGIN_FAILED, error: res.EM })
-          }
+export const doLogin = (ssoToken) => {
+  return async (dispatch, getState) => {
+    dispatch({ type: USER_LOGIN_REQUEST });
+    let res = await axios.post(
+      `${import.meta.env.VITE_REACT_APP_BACKEND_HOST}/verify-token`,
+      { ssoToken },
+      { withCredentials: true }
+    );
+    if (res.EC === 0) {
+      dispatch({ type: USER_LOGIN_SUCCESS, user: res.DT });
+      toast.success(res.EM);
+    } else {
+      dispatch({ type: USER_LOGIN_FAILED, error: res.EM });
     }
-}
+  };
+};
 
-export const doLogout =() => {
+export const doLogout = () => {
   return async (dispatch, getState) => {
-      dispatch({ type: USER_LOGOUT_REQUEST })
-      let res = await axios.get(
-          `${import.meta.env.VITE_REACT_APP_BACKEND_HOST}/api/logout`,
-          { withCredentials: true }
-        );
-        if (res.EC === 0) {
-          dispatch({ type: USER_LOGOUT_SUCCESS })
-          toast.success(res.EM)
-        } else {
-          dispatch({ type: USER_LOGOUT_FAILED, error: res.EM })
-        }
-  }
-}
+    dispatch({ type: USER_LOGOUT_REQUEST });
+    let res = await axios.get(
+      `${import.meta.env.VITE_REACT_APP_BACKEND_HOST}/api/logout`,
+      { withCredentials: true }
+    );
+    if (res.EC === 0) {
+      dispatch({ type: USER_LOGOUT_SUCCESS });
+      toast.success(res.EM);
+    } else {
+      dispatch({ type: USER_LOGOUT_FAILED, error: res.EM });
+    }
+  };
+};
 
-export const doGetAccount =() => {
+export const doGetAccount = () => {
   return async (dispatch, getState) => {
-      dispatch({ type: USER_LOGIN_REQUEST })
+    dispatch({ type: USER_LOGIN_REQUEST });
+    try {
       let res = await axios.get(
-          `${import.meta.env.VITE_REACT_APP_BACKEND_HOST}/api/account`,
-          { withCredentials: true }
-        );
-        if (res.EC === 0) {
-          dispatch({ type: USER_LOGIN_SUCCESS, user: res.DT })
-        } else {
-          dispatch({ type: USER_LOGIN_FAILED, error: res.EM })
-        }
-  }
-}
+        `${import.meta.env.VITE_REACT_APP_BACKEND_HOST}/api/account`,
+        { withCredentials: true }
+      );
+      if (res.EC === 0) {
+        dispatch({ type: USER_LOGIN_SUCCESS, user: res.DT });
+      } else {
+        dispatch({ type: USER_LOGIN_FAILED, error: res.EM });
+      }
+    } catch (error) {
+      dispatch({ type: USER_LOGIN_FAILED, error: error.message });
+      
+    }
+    
+  };
+};

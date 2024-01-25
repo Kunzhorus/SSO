@@ -3,11 +3,9 @@ import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import { loginUser } from "../../services/userServices";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { UserContext } from "../../context/UserContext";
 import "./Login.scss";
 import logo from "../../img/logo192.png";
 function Login() {
-  const { loginContext } = useContext(UserContext);
 
   const history = useHistory();
   const [valueLogin, setValueLogin] = useState("");

@@ -14,11 +14,12 @@ function Code() {
   const dispatch = useDispatch()
   const message = useSelector(state => state.account.errMessage)
   const user = useSelector(state => state.account.userInfo)
- 
+  let firstRun = useRef(true)
   useEffect(() => {
     const verify = async () => {
       const ssoToken = param;
-      if (ssoToken) {
+      if (ssoToken && firstRun) {
+        firstRun = false
         dispatch(doLogin(ssoToken))
       }
     };

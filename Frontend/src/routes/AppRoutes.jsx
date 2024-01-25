@@ -7,6 +7,7 @@ import { Switch, Route } from "react-router-dom";
 import Role from "../components/Roles/Role";
 import GroupRole from "../components/GroupRole/GroupRole";
 import Code from "../components/Code/Code";
+import WeatherState from "../components/About/WeatherState";
 function AppRoutes() {
   return (
     <>
@@ -16,6 +17,9 @@ function AppRoutes() {
         <PrivateRoutes path="/group-role" component={GroupRole} />
         <Route path="/code">
           <Code />
+        </Route>
+        <Route path="/about">
+          <WeatherState />
         </Route>
         <Route path="/signup">
           <Signup />

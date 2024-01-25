@@ -4,25 +4,27 @@ import { BrowserRouter as Router } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useContext } from "react";
 import AppRoutes from "./routes/AppRoutes";
-import { UserContext } from "./context/UserContext";
 import { RotatingLines } from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { doGetAccount } from "./redux/action/accountAction";
 import { useEffect } from "react";
+
 function App() {
   const isLoading = useSelector((state) => state.account.isLoading);
   const user = useSelector((state) => state.account.userInfo);
   const dispatch = useDispatch();
-  const excludedPaths = ["/", "/login", "/code"];
+  const excludedPaths = [ "/login", "/code"];
 
   useEffect(() => {
-    if (!excludedPaths.includes(window.location.pathname)) { 
+    // if (!excludedPaths.includes(window.location.pathname) ) { 
+    //   dispatch(doGetAccount());
+    // }
+    if (user && !user.access_token ) { 
       dispatch(doGetAccount());
     }
   }, []);
-  
+
   return (
     <>
       <Router>
