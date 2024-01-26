@@ -1,13 +1,13 @@
-import Login from "../components/Login/Login";
-import Signup from "../components/Signup/Signup";
-import Users from "../components/ManageUsers/Users";
+import Login from "../pages/Login/Login";
+import Signup from "../pages/Signup/Signup";
+import Users from "../pages/ManageUsers/Users";
 import PrivateRoutes from "./PrivateRoutes";
-import Home from "../components/Home/Home";
+import Home from "../pages/Home/Home";
 import { Switch, Route } from "react-router-dom";
-import Role from "../components/Roles/Role";
-import GroupRole from "../components/GroupRole/GroupRole";
-import Code from "../components/Code/Code";
-import WeatherState from "../components/About/WeatherState";
+import Role from "../pages/Roles/Role";
+import GroupRole from "../pages/GroupRole/GroupRole";
+import Code from "../pages/Code/Code";
+import WeatherState from "../pages/About/WeatherState";
 function AppRoutes() {
   return (
     <>

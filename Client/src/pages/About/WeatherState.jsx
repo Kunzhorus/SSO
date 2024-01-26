@@ -8,7 +8,6 @@ const WeatherState = (props) => {
     const [dataWeather, setDataWeather] = useState([]);
 
     const getWeatherByLocation = async (locationId) => {
-        // 1236594 . woeid
         let res = await axios.post(`http://localhost:8081/get-data-by-url`, {
             url: `api/location/${locationId}`
         })

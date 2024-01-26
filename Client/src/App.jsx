@@ -1,4 +1,4 @@
-import NavHeader from "./components/Navigation/Nav";
+import NavHeader from "./pages/Navigation/Nav";
 import "./App.scss";
 import { BrowserRouter as Router } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";

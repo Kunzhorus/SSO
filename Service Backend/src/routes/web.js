@@ -12,11 +12,11 @@ const initWebRoutes = (app) => {
     router.all('*',  checkUserJWT);
 
     router.get("/", (req, res) => {
-        return res.send("Hello world with Eric & HoiDanIT")
+        return res.send("Test")
     })
     router.get("/health", (req, res) => {
         return res.status(200).json({
-            messeage: 'ok'
+            messeage: 'Get data successfully'
         })
     })
     router.post("/get-data-by-url", homeController.getDataByURL);
