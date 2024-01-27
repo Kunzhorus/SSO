@@ -1,4 +1,5 @@
 const CheckAuthentication = (req, res, next) => {
+  //check for session is valid
   if (req.isAuthenticated()) {
     if (req.path === "/login") {
       return res.redirect("/");

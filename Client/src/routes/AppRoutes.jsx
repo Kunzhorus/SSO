@@ -24,9 +24,9 @@ function AppRoutes() {
         <Route path="/signup">
           <Signup />
         </Route>
-        {/* <Route path="/login">
+        <Route path="/login">
           <Login />
-        </Route> */}
+        </Route>
         <Route path="/" exact>
           <Home />
         </Route>

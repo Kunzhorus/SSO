@@ -6,11 +6,9 @@ import {readGroupController} from "../controllers/groupController"
 import { assignToGroupController, getRoleByGroupController ,readRoleController, createRoleController, updateRoleController, deleteRoleController } from "../controllers/roleController";
 const router = express.Router();
 
-const initApiRoutes = (app) => { 
+const userAPI = (app) => { 
     router.all('*',  checkUserJWT,checkUserPermission);
-
-    router.post("/verify-services-jwt",checkServiceJWT)
-    
+        
     router.post("/register", RegisterController)
     router.post("/login", LoginController)
     router.get("/logout", LogoutController)
@@ -37,4 +35,4 @@ const initApiRoutes = (app) => {
     return app.use('/api', router)
 }
 
-export default initApiRoutes
+export default userAPI

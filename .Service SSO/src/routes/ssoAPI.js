@@ -1,21 +1,18 @@
 import express from "express";
-import homeController from "../controllers/homeController";
 import passport from "passport";
+import {handleHelloWord, GetLoginPage, handleLogout, verifySSOToken} from "../controllers/SSOController";
+import { checkServiceJWT } from "../middleware/JWTAction";
 import CheckAuthentication from "../middleware/CheckAuthentication";
-import { handleLogout } from "../controllers/passportController";
 
-const router = express.Router();
+const ssoAPI = (app) => {
+  const router = express.Router();
 
-/**
- *
- * @param {*} app : express app
- */
-
-const initWebRoutes = (app) => {
   //path, handler
-  router.get("/", CheckAuthentication, homeController.handleHelloWord);
-  router.get("/login", CheckAuthentication, homeController.handleLogin);
-
+  router.get("/", CheckAuthentication, handleHelloWord);
+  router.get("/login", CheckAuthentication, GetLoginPage);
+  router.post("/logout", handleLogout);
+  router.post("/verify-token", verifySSOToken);
+  router.post("/verify-services-jwt",checkServiceJWT)
   // router.post(
   //   "/login",
   //   passport.authenticate("local", {
@@ -24,6 +21,8 @@ const initWebRoutes = (app) => {
   //   })
   // );
 
+
+  //Local
   router.post("/login", function (req, res, next) {
     passport.authenticate("local", function (error, user, info) {
       if (error) {
@@ -42,9 +41,7 @@ const initWebRoutes = (app) => {
     })(req, res, next);
   });
 
-  router.post("/logout", handleLogout);
-  router.post("/verify-token", homeController.verifySSOToken);
-
+  //Google
   router.get(
     "/auth/google",
     passport.authenticate("google", { failureRedirect: "/login", scope : ['email']  })
@@ -59,6 +56,7 @@ const initWebRoutes = (app) => {
     }
   );
 
+  //Facebook
   router.get('/auth/facebook',
   passport.authenticate('facebook'));
 
@@ -74,4 +72,4 @@ const initWebRoutes = (app) => {
   return app.use("/", router);
 };
 
-export default initWebRoutes;
+export default ssoAPI;

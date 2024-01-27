@@ -50,6 +50,7 @@ export const doGetAccount = () => {
         `${import.meta.env.VITE_REACT_APP_BACKEND_HOST}/api/account`,
         { withCredentials: true }
       );
+      console.log(res);
       if (res.EC === 0) {
         dispatch({ type: USER_LOGIN_SUCCESS, user: res.DT });
       } else {

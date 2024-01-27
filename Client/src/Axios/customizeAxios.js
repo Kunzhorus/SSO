@@ -4,7 +4,7 @@ import axiosRetry from 'axios-retry';
 
 // Set config defaults when creating the instance
 const instance = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: import.meta.env.VITE_REACT_APP_BACKEND_HOST,
 });
 
 // config to able set cookie
@@ -72,7 +72,7 @@ instance.interceptors.response.use(
 
       // forbidden (permission related issues)
       case 403: {
-        toast.error("You don't have permission to acces this resource");
+        toast.error("You don't have permission to access this resource");
         return Promise.reject(error);
       }
 

@@ -1,15 +1,13 @@
 import express from 'express'
 import configViewEngine from './config/viewEngine'
-import initApiRoutes from './routes/api'
-import initWebRoutes from './routes/web'
+import userAPI from './routes/userAPI'
+import ssoAPI from './routes/ssoAPI'
 import configCors from './config/cors'
 import { connection } from './config/connectDB'
 import cookieParser from 'cookie-parser'
-import { configPassport } from './controllers/passportController'
 import configSession from './config/session'
-import ConfigLoginWithGoogle from './controllers/Social/GoogleController'
-import ConfigLoginWithFacebook from './controllers/Social/FacebookController'
 import flash from 'connect-flash'
+import { ConfigLocalStrategy, ConfigFacebookStrategy, ConfigGoogleStrategy } from './config/passportStrategy'
 
 const bodyParser = require('body-parser')
 const app = express()
@@ -22,11 +20,11 @@ configSession(app)
 connection()
 configViewEngine(app) 
 configCors(app)
-initApiRoutes(app)
-initWebRoutes(app)
-configPassport()
-ConfigLoginWithGoogle()
-ConfigLoginWithFacebook()
+userAPI(app)
+ssoAPI(app)
+ConfigLocalStrategy()
+ConfigFacebookStrategy()
+ConfigGoogleStrategy()
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`)

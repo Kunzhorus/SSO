@@ -9,7 +9,7 @@ const nonSecurePaths = [
   "/logout",
   "/register",
   "/login",
-  "/verify-services-jwt",
+  "/verify-services-jwt"
 ];
 
 const createJWT = (payload) => {
@@ -42,16 +42,20 @@ const verifyToken = (token) => {
 const checkUserJWT = async (req, res, next) => {
   if (nonSecurePaths.includes(req.path)) return next();
   let cookies = req.cookies;
-  if (cookies && cookies.access_token) {
-    let access_token = cookies.access_token;
-    let decoded = verifyToken(access_token);
+  if (cookies?.access_token || cookies?.refresh_token) {
+    let access_token = cookies?.access_token;
+    let decoded = null;
+    if(access_token){
+      decoded = verifyToken(access_token);
+    }
 
     if (decoded && decoded !== "Token Expired") {
       decoded.access_token = access_token;
       decoded.refresh_token = cookies.refresh_token;
       req.user = decoded;
       next();
-    } else if (decoded && decoded === "Token Expired") {
+    } 
+    else if (decoded && decoded === "Token Expired" || cookies?.refresh_token) {
       //set new access_token
       if (cookies && cookies.refresh_token) {
         let data = await handelRefreshToken(cookies.refresh_token);
@@ -63,25 +67,29 @@ const checkUserJWT = async (req, res, next) => {
             maxAge: 15 * 60 * 1000,
             httpOnly: true,
           });
-
+  
           res.cookie("refresh_token", newRefreshToken, {
             maxAge: 60 * 60 * 1000,
             httpOnly: true,
           });
         }
-
-        return res.status(405).json({
-          EC: -1,
-          EM: "Need to retry with new token",
+  
+        return res.status(200).json({
+          EC: 0,
+          EM: "Token refreshed successfully",
+          DT: {
+            access_token: newAccessToken,
+            refresh_token: newRefreshToken,
+            email: data.user.email,
+            username: data.user.username,
+            roles: data.user.roles,
+          }
         });
       }
-    } else {
-      return res.status(401).json({
-        EC: -1,
-        EM: "Not authenticated the user",
-      });
-    }
-  } else {
+    } 
+  }
+  
+  else {
     return res.status(401).json({
       EC: -1,
       EM: "Not authenticated the user",
@@ -102,13 +110,16 @@ const handelRefreshToken = async (refreshToken) => {
     };
     newAccessToken = createJWT(payload);
     newRefreshToken = uuidv4();
-    await updateUserRefreshToken(newRefreshToken, user.email);
+    await updateUserRefreshToken(user.email, newRefreshToken);
   }
   return {
+    user,
     newAccessToken,
     newRefreshToken,
   };
 };
+
+
 const checkUserPermission = (req, res, next) => {
   if (nonSecurePaths.includes(req.path) || req.path === "/account")
     return next();

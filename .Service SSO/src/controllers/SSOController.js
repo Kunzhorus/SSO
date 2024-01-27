@@ -1,21 +1,38 @@
 import { v4 as uuidv4 } from "uuid";
 import { updateUserRefreshToken } from "../services/loginRegisterService";
-import { getGroupWithRoles } from "../services/JWTservice";
+import { getGroupWithRoles } from "../services/groupService";
 import { createJWT } from "../middleware/JWTAction";
 require('dotenv').config()
 
 const handleHelloWord = (req, res) => {
   return res.render("home.ejs");
 };
-const handleLogin = (req, res) => {
+const GetLoginPage = (req, res) => {
   const serviceURL = req.query.serviceURL;
   return res.render("login.ejs", { redirectURL: serviceURL });
+};
+
+const handleLogout = (req, res, next) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/login");
+  });
+  // req.session.destroy(function(err){
+  //   req.logout(function (err) {
+  //     if (err) {
+  //       return next(err);
+  //     }
+  //     res.redirect('/')
+  //   });
+  // })
 };
 
 const verifySSOToken = async (req, res) => {
   try {
     const ssoToken = req.body.ssoToken;
-    if (req.user && req.user.code && req.user.code === ssoToken) {
+    if (req?.user?.code === ssoToken) {
       const refresh_token = uuidv4();
 
       //update refreshToken
@@ -74,8 +91,9 @@ const verifySSOToken = async (req, res) => {
 };
 
 
-module.exports = {
+export {
   handleHelloWord,
-  handleLogin,
-  verifySSOToken
+  GetLoginPage,
+  verifySSOToken,
+  handleLogout
 };

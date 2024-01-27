@@ -17,6 +17,7 @@ const configSession = (app) => {
     const myStore = new SequelizeStore({
       db: sequelize,
     });
+
     app.use(
       session({
         secret: "keyboard cat",
@@ -29,6 +30,7 @@ const configSession = (app) => {
 
       })
     );
+    
     myStore.sync();
 
     app.use(passport.authenticate('session'));

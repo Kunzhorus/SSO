@@ -1,5 +1,5 @@
 import db from "../models/index";
-import { getGroupWithRoles } from "./JWTservice";
+import { getGroupWithRoles } from "./groupService";
 import { createJWT } from "../middleware/JWTAction";
 require("dotenv").config();
 const bcrypt = require("bcryptjs");
@@ -174,7 +174,6 @@ const getUserByRefreshToken = async (refreshToken) => {
         roles
       }
     }
-
     return user
   } catch (error) {
     console.log(error);

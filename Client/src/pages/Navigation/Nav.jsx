@@ -20,7 +20,7 @@ function NavHeader() {
   const dispatch = useDispatch()
 
   const handleLogin = () => {
-    window.location.href =`${import.meta.env.VITE_REACT_APP_BACKEND_HOST}/login?serviceURL=${import.meta.env.VITE_REACT_SERVICE_URL}`
+    window.location.href =`${import.meta.env.VITE_REACT_APP_BACKEND_HOST}/login?serviceURL=${import.meta.env.VITE_REACT_CLIENT_URL}`
   }
 
   const handleLogout = () => {
