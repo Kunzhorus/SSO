@@ -41,7 +41,7 @@ const ConfigGoogleStrategy =() => {
             googleId: profile.id
         }
         let user = await upsertUserSocialMedia(typeAcc, dataRaw)
-        user.code = uuidv4()
+        user.code = uuidv4() // gán user vào req: req.user
         return cb(null, user);
       }
     ));

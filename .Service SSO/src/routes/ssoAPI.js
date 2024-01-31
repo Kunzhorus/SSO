@@ -32,11 +32,9 @@ const ssoAPI = (app) => {
         return res.status(401).json(info.message);
       }
       req.login(user, function (err) {
+        //user from ConfigLocalStrategy
         if (err) return next(err);
-        // return res.redirect('/')
-        return res
-          .status(200)
-          .json({ ...user, redirectURL: req.body.serviceURL });
+        return res.status(200).json({ ...user, redirectURL: req.body.serviceURL });
       });
     })(req, res, next);
   });

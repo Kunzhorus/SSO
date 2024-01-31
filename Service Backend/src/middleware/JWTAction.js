@@ -2,6 +2,7 @@ import axios from "axios";
 const nonSecurePaths = ["/"];
 require("dotenv").config();
 
+
 const extractToken = (req) => {
   if (
     req.headers.authorization &&
