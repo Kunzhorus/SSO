@@ -2,7 +2,6 @@ import axios from "axios";
 const nonSecurePaths = ["/"];
 require("dotenv").config();
 
-
 const extractToken = (req) => {
   if (
     req.headers.authorization &&
@@ -12,6 +11,7 @@ const extractToken = (req) => {
   }
   return null;
 };
+
 
 const checkUserJWT = async (req, res, next) => {
   if (nonSecurePaths.includes(req.path)) return next();
